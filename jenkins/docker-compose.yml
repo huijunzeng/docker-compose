@@ -1,0 +1,22 @@
+version: '3.4'
+services: #Jenkins持续集成工具
+  prometheus:
+    image: jenkins/jenkins:lts #jenkins长期支持版本镜像
+    container_name: jenkins #容器名
+    restart: on-failure
+    environment:
+      TZ: Asia/Shanghai
+    ports: #避免出现端口映射错误，建议采用字符串格式
+      - "8888:8080"  #映射访问端口为9090
+      - "50000:50000"  #映射端口为50000
+    privileged: true #授权容器内用户超管权限
+    user: root
+    volumes:
+    #挂载Jenkins的配置以及数据(包含插件安装)
+      - /media/blog/jenkins/home/:/var/jenkins_home
+    networks:
+      - blog  
+                   
+networks:
+  blog: 
+    external: true
