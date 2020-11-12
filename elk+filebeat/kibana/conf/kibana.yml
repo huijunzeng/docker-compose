@@ -1,0 +1,10 @@
+#
+## ** THIS IS AN AUTO-GENERATED FILE **
+##
+#
+## Default Kibana configuration for docker target
+server.name: "kibana"
+## 必须设置为0.0.0.0才能访问到elasticsearch
+server.host: "0.0.0.0"
+## host的公网ip，也可以填写docker-compose.yml中elasticsearch的容器名如 "http://elasticsearch:9200"（前提是同属于一个docker network，且类型为bridge）
+elasticsearch.hosts: [ "http://106.52.202.31:9200" ]
