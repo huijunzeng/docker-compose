@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  mysql-master: #mysql主库
+    image: mysql:8.0.27 #mysql镜像
+    container_name: mysql-master #容器名
+    restart: on-failure
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: a123456 #root管理员用户密码
+    ports: #避免出现端口映射错误，建议采用字符串格式
+      - "3306:3306"  #映射端口为3306
+    volumes:
+      #mysql数据库挂载到host物理机目录
+      - ./master/data:/var/lib/mysql
+      #容器的配置目录挂载到host物理机目录
+      - ./master/conf/my.cnf:/etc/mysql/my.cnf
+      #设置容器时区与宿主机保持一致
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    networks:
+      - mysql
+
+  mysql-slave: #mysql从库
+    image: mysql:8.0.27 #mysql镜像
+    container_name: mysql-slave #容器名
+    restart: on-failure
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: b123456 #root管理员用户密码
+    ports: #避免出现端口映射错误，建议采用字符串格式
+      - "3307:3306"  #映射端口为3307
+    volumes:
+      #mysql数据库挂载到host物理机目录
+      - ./slave/data:/var/lib/mysql
+      #容器的配置目录挂载到host物理机目录
+      - ./slave/conf/my.cnf:/etc/mysql/my.cnf
+      #设置容器时区与宿主机保持一致 ubuntu版本
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    networks:
+      - mysql
+networks:
+  mysql:
+    external: true

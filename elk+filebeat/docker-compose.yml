@@ -1,4 +1,4 @@
-version: "3.4" #版本号
+version: "3.9" #版本号
 services:
   ########## elk日志套件(镜像版本最好保持一致) ##########
   elasticsearch: #服务名称
@@ -17,9 +17,9 @@ services:
         soft: -1
         hard: -1
     volumes: #挂载文件
-      - /media/elk/elasticsearch/data:/usr/share/elasticsearch/data
-      - /media/elk/elasticsearch/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - /media/elk/elasticsearch/logs:/usr/share/elasticsearch/logs
+      - /opt/elk/elasticsearch/data:/usr/share/elasticsearch/data
+      - /opt/elk/elasticsearch/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - /opt/elk/elasticsearch/logs:/usr/share/elasticsearch/logs
     networks: #网络命名空间  用于隔离服务
       - elk
 
@@ -32,7 +32,7 @@ services:
     ports:
       - "5601:5601"
     volumes:
-      - /media/elk/kibana/conf/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - /opt/elk/kibana/conf/kibana.yml:/usr/share/kibana/config/kibana.yml
     networks:
       - elk
 
@@ -47,8 +47,8 @@ services:
       - "9600:9600"
       - "5044:5044"
     volumes: #logstash.conf日志处理配置文件  格式：#输入 input{}   #分析、过滤 filter{}   #输出 output{}
-      - /media/elk/logstash/conf/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - /media/elk/logstash/conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - /opt/elk/logstash/conf/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - /opt/elk/logstash/conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     networks:
       - elk
 
@@ -61,8 +61,8 @@ services:
       - kibana
     restart: on-failure
     volumes: #filebeat.yml配置.log文件的日志输出到logstash #同时配置挂载需要扫描的日志目录，因为扫描的是filebeat容器内的文件路径
-      - /media/elk/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - /media/elk/logs:/var/elk/logs
+      - /opt/elk/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - /opt/elk/logs:/var/elk/logs
     networks:
       - elk
 

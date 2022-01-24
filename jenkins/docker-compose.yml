@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.9"
 services: #Jenkins持续集成工具
   prometheus:
     image: jenkins/jenkins:lts #jenkins长期支持版本镜像
@@ -13,10 +13,10 @@ services: #Jenkins持续集成工具
     user: root
     volumes:
     #挂载Jenkins的配置以及数据(包含插件安装)
-      - /media/blog/jenkins/home/:/var/jenkins_home
+      - /opt/jenkins/home/:/var/jenkins_home
     networks:
-      - blog  
+      - demo
                    
 networks:
-  blog: 
+  demo:
     external: true
